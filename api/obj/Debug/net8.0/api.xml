@@ -13,7 +13,7 @@
         </member>
         <member name="M:Api.Controllers.TaskController.List(System.String)">
             <summary>
-            Funcion utilizada para la visualizacion de informacion segun estado indicado. Tener en cuenta que en el caso de no colocar un estado existente se tomara por defecto el estado PENDIENTE
+            Funcion utilizada para la visualizacion de informacion segun estado indicado.
             </summary>
             <param name="state"></param>
             <returns></returns>

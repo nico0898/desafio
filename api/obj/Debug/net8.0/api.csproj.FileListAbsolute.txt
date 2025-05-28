@@ -33,3 +33,4 @@
 /Users/nicolasmendez/Desktop/desafio/api/obj/Debug/net8.0/ref/api.dll
 /Users/nicolasmendez/Desktop/desafio/api/bin/Debug/net8.0/api.xml
 /Users/nicolasmendez/Desktop/desafio/api/obj/Debug/net8.0/api.xml
+/Users/nicolasmendez/Desktop/desafio/api/obj/Debug/net8.0/api.sourcelink.json
