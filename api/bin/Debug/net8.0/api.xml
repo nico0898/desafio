@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>api</name>
+    </assembly>
+    <members>
+        <member name="M:Api.Controllers.TaskController.Create(api.Models.TaskModel)">
+            <summary>
+            Funcion utilizada para la creacion de tareas
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Api.Controllers.TaskController.List(System.String)">
+            <summary>
+            Funcion utilizada para la visualizacion de informacion segun estado indicado. Tener en cuenta que en el caso de no colocar un estado existente se tomara por defecto el estado PENDIENTE
+            </summary>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Api.Controllers.TaskController.Complete(System.Guid)">
+            <summary>
+            Funcion utilizada para la modificacion del estado a completado
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Api.Controllers.TaskController.Delete(System.Guid)">
+            <summary>
+            Funcion utilizada para la eliminacion de una tarea 
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
