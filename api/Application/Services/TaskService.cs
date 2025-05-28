@@ -34,7 +34,7 @@ namespace api.Application.Services
             var tareas = await _repo.ListAsync();
 
             if (tareas.Count(t => t.State == State.Pendiente && t.Priority == Priority.Alta) >= 10)
-                Console.WriteLine("⚠️ Advertencia: más de 10 tareas de alta prioridad pendientes");
+                Console.WriteLine("Advertencia: más de 10 tareas de alta prioridad pendientes");
 
             newTask.Id = Guid.NewGuid();
             return await _repo.CreateAsync(newTask);
@@ -57,7 +57,7 @@ namespace api.Application.Services
 
             var tasks = await _repo.ListAsync();
 
-            return tasks.Where(x =>  x.State == filter).OrderByDescending(y => y.Priority).OrderBy(z => z.ExpiryDate).ToList();
+            return tasks.Where(x => x.State == filter).OrderByDescending(y => y.Priority).OrderBy(z => z.ExpiryDate).ToList();
         }
 
         public async System.Threading.Tasks.Task DeleteAsync(Guid id)
