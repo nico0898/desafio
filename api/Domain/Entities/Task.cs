@@ -7,7 +7,7 @@ namespace api.Domain.Entities
 {
     public enum Priority { Baja, Media, Alta }
 
-    public enum State { Pendiente, Completada }
+    public enum State { Pendiente, Completado }
 
     public class Task
     {

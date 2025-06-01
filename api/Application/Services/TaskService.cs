@@ -46,7 +46,7 @@ namespace api.Application.Services
             if (task == null) throw new Exception("Tarea no encontrada");
             if (task.ExpiryDate < DateTime.Now) throw new Exception("No se puede completar una tarea vencida");
 
-            task.State = State.Completada;
+            task.State = State.Completado;
             await _repo.UpdateAsync(task);
             return task;
         }

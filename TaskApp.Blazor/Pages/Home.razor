@@ -1,0 +1,97 @@
+﻿@page "/"
+@inject HttpClient Http
+
+<h3>Lista de tareas</h3>
+
+@if (tareas == null)
+{
+    <p>Cargando...</p>
+}
+else if (tareas.Count == 0)
+{
+    <p>No hay tareas.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Prioridad</th>
+                <th>Estado</th>
+                <th>Vencimiento</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tarea in tareas)
+            {
+                <tr>
+                    <td>@tarea.Title</td>
+                    <td>@tarea.Description</td>
+                    <td>@(ObtenerPrioridad(tarea.Priority))</td>
+                    <td>@(ObtenerEstado(tarea.State))</td>
+                    <td>@tarea.ExpiryDate.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        <button @onclick="() => CompletarTarea(tarea.Id)" class="btn btn-success btn-sm" disabled="@EsCompletada(tarea.State)">
+                            ✔️ Completar
+                        </button>
+                        <button @onclick="() => EliminarTarea(tarea.Id)" class="btn btn-danger btn-sm">
+                            🗑️ Eliminar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Models.TaskModel>? tareas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarTareas();
+    }
+
+    private async Task CargarTareas()
+    {
+        tareas = await Http.GetFromJsonAsync<List<Models.TaskModel>>("api/Task/List?state=Completado");
+    }
+
+    private async Task CompletarTarea(Guid id)
+    {
+        var response = await Http.PutAsync($"api/Task/Complete?id={id}", null);
+        if (response.IsSuccessStatusCode)
+        {
+            await CargarTareas();
+        }
+    }
+
+    private async Task EliminarTarea(Guid id)
+    {
+        var response = await Http.DeleteAsync($"api/Task/Delete?id={id}");
+        if (response.IsSuccessStatusCode)
+        {
+            await CargarTareas();
+        }
+    }
+
+    private string ObtenerPrioridad(int valor) => valor switch
+    {
+        0 => "Baja",
+        1 => "Media",
+        2 => "Alta",
+        _ => "Desconocida"
+    };
+
+    private string ObtenerEstado(int valor) => valor switch
+    {
+        0 => "Pendiente",
+        1 => "Completado",
+        _ => "Desconocido"
+    };
+
+    private bool EsCompletada(int estado) => estado == 1;
+}

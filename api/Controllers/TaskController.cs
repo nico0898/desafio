@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers;
 
 [ApiController]
-[Route("api/[action]")]
+[Route("api/[controller]")]
 public class TaskController : ControllerBase
 {
     private readonly TaskService _service;
@@ -23,7 +23,7 @@ public class TaskController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
 
-    [HttpPost]
+    [HttpPost("Create")]
     public async Task<IActionResult> Create([FromBody] TaskModel model)
     {
         var task = await _service.CreateAsync(model);
@@ -35,8 +35,8 @@ public class TaskController : ControllerBase
     /// </summary>
     /// <param name="state"></param>
     /// <returns></returns>
-    [HttpGet("{state}")]
-    public async Task<IActionResult> List(string state)
+    [HttpGet("List")]
+    public async Task<IActionResult> List([FromQuery] string state = "Pendiente")
     {
         var tasks = await _service.ListAsync(state);
         return Ok(tasks);
@@ -47,8 +47,8 @@ public class TaskController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Complete(Guid id)
+    [HttpPut("Complete")]
+    public async Task<IActionResult> Complete([FromQuery] Guid id)
     {
         var task = await _service.CompleteTaskAsync(id);
         return Ok(task);
@@ -59,8 +59,8 @@ public class TaskController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("Delete")]
+    public async Task<IActionResult> Delete([FromQuery] Guid id)
     {
         await _service.DeleteAsync(id);
         return Ok();

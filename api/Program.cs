@@ -1,35 +1,49 @@
+using api.Application.Services;
 using api.Domain.Interfaces;
 using api.Infrastructure.Repositories;
-using api.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 👉 Registrar servicios y dependencias
-builder.Services.AddControllers(); //Habilita los controladores
-builder.Services.AddEndpointsApiExplorer(); //swagger
-builder.Services.AddSwaggerGen(options =>
-{
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    options.IncludeXmlComments(xmlPath);
-});
+// 🔧 Servicios
+builder.Services.AddControllers();
 
-// 👉 Inyección de dependencias
+builder.Services.AddCors(); // <--- sin política nombrada
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// 🔧 Inyección de dependencias
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<TaskService>();
 
 var app = builder.Build();
 
-// 👉 Configuración del pipeline HTTP
+// 🧨 ACTIVAR CORS DE FORMA GLOBAL, FORZADO
+app.Use((context, next) =>
+{
+    context.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:5053";
+    context.Response.Headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS";
+    context.Response.Headers["Access-Control-Allow-Headers"] = "*";
+
+    // Manejar preflight (OPTIONS)
+    if (context.Request.Method == "OPTIONS")
+    {
+        context.Response.StatusCode = 200;
+        return Task.CompletedTask;
+    }
+
+    return next();
+});
+
+// ⚠️ Swagger (después de CORS)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection(); // COMENTADO si estás usando HTTP
 
-// 👉 Mapear los controladores
 app.MapControllers();
-    
+
 app.Run();
